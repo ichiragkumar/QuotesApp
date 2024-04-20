@@ -8,6 +8,9 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 
@@ -16,6 +19,12 @@ class DashboardScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard_screen)
+
+        val  goBack  = findViewById<Button>(R.id.gotoLoginScreen)
+        goBack.setOnClickListener {
+            val intent = Intent(applicationContext, LoginScreen::class.java)
+            startActivity(intent)
+        }
 
 
         auth = FirebaseAuth.getInstance()
@@ -35,6 +44,8 @@ class DashboardScreen : AppCompatActivity() {
                 editTextPassword.error = "Password cannot be empty"
                 return@setOnClickListener
             }
+
+
            if (validateEmail(email) && validatePassword(password)) {
                 createAccount(email, password)
             } else {
@@ -57,14 +68,12 @@ class DashboardScreen : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
+                    Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show()
                     val user = auth.currentUser
-                    // Navigate to HomeScreen
                     startActivity(Intent(this, HomeScreen::class.java))
                     finish()
                 } else {
-                    // If sign in fails, display a message to the user.
-                    // You can handle specific failure cases here
+                    showToast("Failed : ${task.exception?.message}")
                 }
             }
     }
