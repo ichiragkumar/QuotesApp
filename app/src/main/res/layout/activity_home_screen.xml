@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".HomeScreen">
 
-
     <ProgressBar
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"

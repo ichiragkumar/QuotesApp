@@ -25,7 +25,11 @@ class ProfileScreen : AppCompatActivity() {
             val intent = Intent(applicationContext, HomeScreen::class.java)
             startActivity(intent)
         }
-
+        val  gotoEditScreen = findViewById<ImageButton>(R.id.imageButton4)
+        gotoEditScreen.setOnClickListener {
+            val intent = Intent(applicationContext, EditProfileScreen::class.java)
+            startActivity(intent)
+        }
         // Check if user is logged in
         val currentUser = auth.currentUser
         if (currentUser != null) {
