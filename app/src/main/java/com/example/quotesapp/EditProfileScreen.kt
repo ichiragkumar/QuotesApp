@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.app.DatePickerDialog
 import android.icu.util.Calendar
+import android.view.View
 import com.google.firebase.database.FirebaseDatabase
 
 class EditProfileScreen : AppCompatActivity() {
@@ -64,6 +65,7 @@ class EditProfileScreen : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+
         val datePickerDialog = DatePickerDialog(
             this,
             { _, selectedYear, selectedMonth, selectedDay ->
@@ -85,6 +87,14 @@ class EditProfileScreen : AppCompatActivity() {
         val gender = findViewById<Spinner>(R.id.genderSpinner).selectedItem.toString()
         val dob = dobTextView.text.toString()
 
+        // Check if any field is empty
+        if (firstName.isEmpty() || lastName.isEmpty() || dob.isEmpty()) {
+            // Show warning message
+            findViewById<TextView>(R.id.warningTextView).visibility = View.VISIBLE
+            return
+
+        }
+
         // Save details to Firebase Realtime Database
         val database = FirebaseDatabase.getInstance("https://quotesapp-5a307-default-rtdb.asia-southeast1.firebasedatabase.app/").reference.child("users")
         val user = HashMap<String, String>()
@@ -95,10 +105,10 @@ class EditProfileScreen : AppCompatActivity() {
 
         database.push().setValue(user)
             .addOnSuccessListener {
-                Toast.makeText(this, "Profile details saved successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Failed to save profile details", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to Save", Toast.LENGTH_SHORT).show()
             }
     }
 }

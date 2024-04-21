@@ -10,6 +10,8 @@
         android:id="@+id/firstNameEditText"
         android:layout_width="251dp"
         android:layout_height="65dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:hint="First Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,12 +19,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.084" />
+    <TextView
+        android:id="@+id/warningTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:text="Please Fill in all Fields"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/submitButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
 
     <EditText
         android:id="@+id/lastNameEditText"
         android:layout_width="264dp"
         android:layout_height="68dp"
         android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:hint="Last Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.38"
@@ -33,6 +53,8 @@
         android:id="@+id/genderSpinner"
         android:layout_width="209dp"
         android:layout_height="46dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.242"
@@ -43,6 +65,8 @@
         android:id="@+id/dobTextView"
         android:layout_width="153dp"
         android:layout_height="39dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:text="DOB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,21 +77,25 @@
 
     <Button
         android:id="@+id/dobButton"
-        android:layout_width="100dp"
-        android:layout_height="42dp"
+        android:layout_width="99dp"
+        android:layout_height="41dp"
         android:layout_marginTop="36dp"
-        android:text="Select DOB"
+        android:text="DOB"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.829"
+        app:layout_constraintHorizontal_bias="0.836"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/genderSpinner"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.032" />
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="211dp"
         android:layout_height="55dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:layout_marginTop="84dp"
         android:text="Save Details"
         app:layout_constraintBottom_toBottomOf="parent"
