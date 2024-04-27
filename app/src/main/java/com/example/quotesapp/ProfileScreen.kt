@@ -10,8 +10,12 @@ import android.widget.ImageButton
 import com.google.firebase.auth.FirebaseAuth
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.firestore.Query
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestoreException
 
 class ProfileScreen : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -23,16 +27,15 @@ class ProfileScreen : AppCompatActivity() {
 
     private lateinit var database: DatabaseReference
     private lateinit var currentUser: FirebaseUser
+    private lateinit var firestore: FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_screen)
         auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
-        // Initialize Firebase Database reference
-        database =
-            FirebaseDatabase.getInstance("https://quotesapp-5a307-default-rtdb.asia-southeast1.firebasedatabase.app/").reference
         currentUser = auth.currentUser!!
-        fetchUserData()
 
         firstNameTextView = findViewById(R.id.textView2)
         lastNameTextView = findViewById(R.id.textView3)
@@ -66,34 +69,55 @@ class ProfileScreen : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
+            firestore.collection("users").orderBy("createdAt", Query.Direction.DESCENDING
+                )
+                .limit(1)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        // Get the first document (which is the latest one)
+                        val document = querySnapshot.documents[0]
+
+                        val firstName = document.getString("firstName")
+                        val lastName = document.getString("lastName")
+                        val gender = document.getString("gender")
+                        val dob = document.getString("dob")
+                        val updatedDate = document.getString("updatedDate")
+
+                        // Update TextViews with retrieved data
+                        firstNameTextView.text = firstName
+                        lastNameTextView.text = lastName
+                        genderTextView.text = gender
+                        dobTextView.text = dob
+                        updatedDateTextView.text = updatedDate
+
+                        // Debugging log
+                        Log.d(
+                            "ProfileScreen",
+                            "First Name: $firstName, Last Name: $lastName, Gender: $gender, DOB: $dob, Updated Date: $updatedDate"
+                        )
+                    } else {
+                        // No documents found
+                        Log.d("ProfileScreen", "No user data found")
+                        // Handle the case if no documents are found
+                        // For example, display a message to the user indicating that the profile is not found
+                        Toast.makeText(this, "Profile not found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle any errors
+                    Log.e("ProfileScreen", "Error getting user data", exception)
+                }
 
         }
-    }
 
-    private fun fetchUserData() {
-        val userId = currentUser.uid
-        database.child("users").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val user = dataSnapshot.getValue(User::class.java)
-                user?.let {
-                    firstNameTextView.text = it.firstName
-                    lastNameTextView.text = it.lastName
-                    genderTextView.text = it.gender
-                    dobTextView.text = it.dob
-                    updatedDateTextView.text = it.updatedDate
-                    // Show success message
-                    Toast.makeText(applicationContext, "Data fetched successfully", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle error
-                Toast.makeText(applicationContext, "Failed to fetch data: ${databaseError.message}", Toast.LENGTH_SHORT).show()
-            }
-
-        })
     }
 }
+
+
+
+
+
+
 
 
