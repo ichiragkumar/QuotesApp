@@ -8,24 +8,28 @@
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="27dp"
-        android:layout_height="14dp"
-        android:text="Joined At"
+        android:layout_width="153dp"
+        android:layout_height="24dp"
+        android:text="UpdatedAt"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.244"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.641" />
+        app:layout_constraintVertical_bias="0.628" />
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="39dp"
-        android:layout_height="18dp"
+        android:layout_width="111dp"
+        android:layout_height="27dp"
         android:text="DOB"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.612"
+        app:layout_constraintHorizontal_bias="0.74"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.525" />
@@ -35,6 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gender"
+        android:textStyle="bold"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.256"
@@ -47,6 +53,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Last Name"
+        android:textStyle="bold"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.667"
@@ -58,6 +66,8 @@
         android:id="@+id/circularViewContainer"
         android:layout_width="143dp"
         android:layout_height="143dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:background="@drawable/circular_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,8 +82,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="A"
+            android:textStyle="bold"
+            android:textSize="20dp"
             android:textColor="@android:color/white"
-            android:textSize="24sp" />
+             />
     </FrameLayout>
 
     <ImageButton
@@ -149,6 +161,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="First Name"
+        android:textStyle="bold"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.274"
