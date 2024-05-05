@@ -32,10 +32,11 @@ class ProfileScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_screen)
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
 
+        auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser!!
+        database = FirebaseDatabase.getInstance("https://quotesapp-5a307-default-rtdb.asia-southeast1.firebasedatabase.app/").reference.child("users").child(currentUser.uid)
+
 
         firstNameTextView = findViewById(R.id.textView2)
         lastNameTextView = findViewById(R.id.textView3)
@@ -69,48 +70,29 @@ class ProfileScreen : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
-            firestore.collection("users").orderBy("createdAt", Query.Direction.DESCENDING
-                )
-                .limit(1)
-                .get()
-                .addOnSuccessListener { querySnapshot ->
-                    if (!querySnapshot.isEmpty) {
-                        // Get the first document (which is the latest one)
-                        val document = querySnapshot.documents[0]
 
-                        val firstName = document.getString("firstName")
-                        val lastName = document.getString("lastName")
-                        val gender = document.getString("gender")
-                        val dob = document.getString("dob")
-                        val updatedDate = document.getString("updatedDate")
 
-                        // Update TextViews with retrieved data
-                        firstNameTextView.text = firstName
-                        lastNameTextView.text = lastName
-                        genderTextView.text = gender
-                        dobTextView.text = dob
-                        updatedDateTextView.text = updatedDate
-
-                        // Debugging log
-                        Log.d(
-                            "ProfileScreen",
-                            "First Name: $firstName, Last Name: $lastName, Gender: $gender, DOB: $dob, Updated Date: $updatedDate"
-                        )
+            database.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val user = snapshot.getValue(User::class.java)
+                        user?.let {
+                            firstNameTextView.text = it.firstName
+                            lastNameTextView.text = it.lastName
+                            genderTextView.text = it.gender
+                            dobTextView.text = it.dob
+                            updatedDateTextView.text = it.updatedDate
+                        }
                     } else {
-                        // No documents found
-                        Log.d("ProfileScreen", "No user data found")
-                        // Handle the case if no documents are found
-                        // For example, display a message to the user indicating that the profile is not found
-                        Toast.makeText(this, "Profile not found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ProfileScreen, "Profile not found", Toast.LENGTH_SHORT).show()
                     }
                 }
-                .addOnFailureListener { exception ->
-                    // Handle any errors
-                    Log.e("ProfileScreen", "Error getting user data", exception)
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@ProfileScreen, "Failed to fetch profile data", Toast.LENGTH_SHORT).show()
                 }
-
+            })
         }
-
     }
 }
 

@@ -104,6 +104,47 @@
         }
 
 
+//        private fun saveProfileDetails() {
+//            val firstName = firstNameEditText.text.toString()
+//            val lastName = lastNameEditText.text.toString()
+//            val gender = genderSpinner.selectedItem.toString()
+//            val dob = dobTextView.text.toString()
+//
+//            // Check if any field is empty
+//            if (firstName.isEmpty() || lastName.isEmpty() || dob.isEmpty()) {
+//                // Show warning message
+//                findViewById<TextView>(R.id.warningTextView).visibility = View.VISIBLE
+//                return
+//            }
+//
+//            val currentTime = Calendar.getInstance().time
+//            val sdf = SimpleDateFormat("MMMM yyyy, h a", Locale.getDefault())
+//            val formattedTime = sdf.format(currentTime)
+//
+//            val db = FirebaseFirestore.getInstance()
+//            val user = HashMap<String, Any>()
+//            user["firstName"] = firstName
+//            user["lastName"] = lastName
+//            user["gender"] = gender
+//            user["dob"] = dob
+//            user["updatedDate"] = formattedTime
+//
+//            db.collection("users")
+//                .add(user)
+//                .addOnSuccessListener { documentReference ->
+//                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//                    Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show()
+//                }
+//                .addOnFailureListener { e ->
+//                    Log.w(TAG, "Error adding document", e)
+//                    Toast.makeText(this, "Failed to Save", Toast.LENGTH_SHORT).show()
+//                }
+//        }
+//
+//
+//
+//    }
+
         private fun saveProfileDetails() {
             val firstName = firstNameEditText.text.toString()
             val lastName = lastNameEditText.text.toString()
@@ -117,36 +158,33 @@
                 return
             }
 
-            val currentTime = Calendar.getInstance().time
-            val sdf = SimpleDateFormat("MMMM yyyy, h a", Locale.getDefault())
-            val formattedTime = sdf.format(currentTime)
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            currentUser?.let { user ->
+                val userId = user.uid
+                val userRef = FirebaseDatabase.getInstance("https://quotesapp-5a307-default-rtdb.asia-southeast1.firebasedatabase.app/").reference.child("users").child(userId)
 
-            val db = FirebaseFirestore.getInstance()
-            val user = HashMap<String, Any>()
-            user["firstName"] = firstName
-            user["lastName"] = lastName
-            user["gender"] = gender
-            user["dob"] = dob
-            user["updatedDate"] = formattedTime
+                val currentTime = Calendar.getInstance().time
+                val sdf = SimpleDateFormat("MMMM yyyy, h a", Locale.getDefault())
+                val formattedTime = sdf.format(currentTime)
 
-            db.collection("users")
-                .add(user)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                    Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                    Toast.makeText(this, "Failed to Save", Toast.LENGTH_SHORT).show()
-                }
-        }
+                val userData = User(firstName, lastName, gender, dob, formattedTime)
+                userRef.setValue(userData)
+                    .addOnSuccessListener {
+                        startActivity(Intent(applicationContext, ProfileScreen::class.java))
+                        Log.d(TAG, "User data saved successfully")
 
-
-
-    }
+                        Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e(TAG, "Error saving user data", e)
+                        Toast.makeText(this, "Failed to Save", Toast.LENGTH_SHORT).show()
+                    }
+            }
+        }}
 
 
-    data class User(
+
+        data class User(
         var firstName: String? = "",
         var lastName: String? = "",
         var gender: String? = "",
